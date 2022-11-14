@@ -1,5 +1,5 @@
 
-///// Common class first
+/////// Common class first
 function Builder(x) {
   this.x = x;
 }
@@ -34,10 +34,11 @@ Builder.prototype.get = function(){
   return this.x;
 };
 
-////// ES6 for numbers
+/////// ES6 for numbers
 class IntBuilder extends Builder {
   constructor(x) {
     super(x);
+    this.x = x||0;
   }
 
   mod(y) {
@@ -52,36 +53,40 @@ class IntBuilder extends Builder {
   }
 }
 
-////// ES5 for strings
+/////// ES5 for strings
 function StringBuilder(x) {
-  Builder.call(x);
+  Builder.call(this, x);
+  this.x = x||'';
 }
-
 StringBuilder.prototype = Object.create(Builder.prototype);
+//can also set through Object.setPrototypeOf(StringBuilder, Builder) ?;
+
 StringBuilder.prototype.sub = function(from, n) {
   this.from = from;
   this.n = n;
-  return x.substr(this.from, this.n);
+  return this.x.substr(this.from, this.n);
 }
 
+StringBuilder.prototype.remove = function(str) {
+  this.str = str;
+  let from = this.x.indexOf(this.str);
+  let to = from + str.length;
+  if (from == -1) {
+    return;
+  } else {
+    return `${this.x.slice(0, from)}${this.x.slice(to)}`;
+  }
+}
 
-new StringBuilder(str)   // constructor takes starting string, if not passed starts with '';
-plus(...str)// takes infinite number of strings and concat with stored string;
-minus(n)    // cut last n chars from stored string;
-multiply(int)// repeat stored strings n times;
-divide(n)   // leaves first k chars of stored string, where k = Math.floor(str.length / n);
-remove(str) // remove taken string str from stored; Prohibited to use String.prototype.replace(); 
-sub(from, n)// leaves substring starting from and with length n;
-get() // returns stored value;
+StringBuilder.prototype.minus = function(y) {
+  return this.x.replace(this.x.slice(-y),'');
+}
 
-let strBuilder = new StringBuilder('Hello'); // 'Hello';
-strBuilder
-  .plus(' all', '!')// 'Hello all!'
-  .minus(4)  // 'Hello '
-  .multiply(3)     // 'Hello Hello Hello '
-  .divide(4) // 'Hell';
-  .remove('l')     // 'He';
-  .sub(1,1)  // 'e';
-  .get();    // -> 'e';
+StringBuilder.prototype.multiply = function(y) {
+  return this.x.repeat(y);
+}
 
-console.log(strBuilder.sub(1,2));
+StringBuilder.prototype.divide = function(y) {
+  let k = Math.floor(this.x.length /y);
+  return this.x.substr(0, k);
+}
