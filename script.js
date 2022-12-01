@@ -4,16 +4,16 @@ function Builder(x) {
 }
 
 Builder.prototype.plus = function(){
-  let args = [].slice.call(arguments);
-  for (let arg of args) {
+  var args = [].slice.call(arguments);
+  for (var arg of args) {
     this.x += arg;
   }
   return this;
 };
 
 Builder.prototype.minus = function(){
-  let args = [].slice.call(arguments);
-  for (const arg of args) {
+  var args = [].slice.call(arguments);
+  for (var arg of args) {
     this.x -= arg;
   }
   return this;
@@ -30,7 +30,7 @@ Builder.prototype.divide = function(y){
 };
 
 Builder.prototype.get = function(){
-  return this;
+  return this.x;
 };
 
 /////// ES6 for numbers
@@ -57,7 +57,7 @@ class IntBuilder extends Builder {
 //   .divide(4)                         // 7;
 //   .mod(3)                            // 1;
 //   .get();                            // -> 1;
-// console.log(intBuilder);
+// console.log(intBuilder.get());
 // console.log(IntBuilder.random(10, 100));
 
 
@@ -75,15 +75,15 @@ StringBuilder.prototype.sub = function(from, n) {
 }
 
 StringBuilder.prototype.remove = function(str) {
-  let from = this.x.indexOf(str);
-  let to = from + str.length;
+  var from = this.x.indexOf(str);
+  var to = from + str.length;
   if (from == -1) {
     return;
   } else {
     this.x = this.x.slice(0, from) + this.x.slice(to);
     return this;
   }
-}//it is said in the task not to use replace(), is there one more simple solution?
+}
 
 StringBuilder.prototype.minus = function(y) {
   this.x = this.x.replace(this.x.slice(-y),'');
@@ -96,7 +96,7 @@ StringBuilder.prototype.multiply = function(y) {
 }
 
 StringBuilder.prototype.divide = function(y) {
-  let k = Math.floor(this.x.length / y);
+  var k = Math.floor(this.x.length / y);
   this.x = this.x.substr(0, k);
   return this;
 }
@@ -110,4 +110,4 @@ StringBuilder.prototype.divide = function(y) {
 //   .remove('l')                               // 'He';
 //   .sub(1,1)                                  // 'e';
 //   .get();                                    // -> 'e';
-//   console.log(strBuilder);
+//   console.log(strBuilder.get());
